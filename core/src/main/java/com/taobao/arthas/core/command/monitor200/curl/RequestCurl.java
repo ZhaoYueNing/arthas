@@ -1,12 +1,11 @@
-package com.kuaishou.sz.sdk.log;
-
-import java.io.IOException;
-import java.util.Objects;
+package com.taobao.arthas.core.command.monitor200.curl;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.taobao.arthas.core.command.model.ResultModel;
 
 /**
  * @author zhaoyuening
@@ -17,7 +16,7 @@ public class RequestCurl {
 
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
-        if (Objects.isNull(requestAttributes)) {
+        if (requestAttributes == null) {
             return null;
         }
         return requestAttributes.getRequest();
@@ -27,7 +26,7 @@ public class RequestCurl {
     public String toString() {
         try {
             HttpServletRequest request = getRequest();
-            if (Objects.isNull(request)) {
+            if (request == null) {
                 return "noCurl";
             }
             return new CurlBuilder(request).build();

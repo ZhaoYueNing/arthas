@@ -1,8 +1,7 @@
-package com.kuaishou.sz.sdk.log;
+package com.taobao.arthas.core.command.monitor200.curl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -12,7 +11,7 @@ import java.util.Set;
  * @author zhaoyuening
  */
 public class Options {
-    public static final Options EMPTY = new Options(Collections.emptyList());
+    public static final Options EMPTY = new Options(new ArrayList<String>());
 
     private final List<String> options;
 
@@ -21,7 +20,7 @@ public class Options {
     }
 
     private Options(Collection<String> options) {
-        this.options = new ArrayList<>(options);
+        this.options = new ArrayList<String>(options);
     }
 
     public List<String> list() {
@@ -30,7 +29,7 @@ public class Options {
 
     public static class Builder {
 
-        private final Set<String> options = new HashSet<>();
+        private final Set<String> options = new HashSet<String>();
 
         public Builder insecure() {
             options.add("--insecure");

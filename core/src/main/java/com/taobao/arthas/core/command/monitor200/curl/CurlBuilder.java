@@ -1,4 +1,4 @@
-package com.kuaishou.sz.sdk.log;
+package com.taobao.arthas.core.command.monitor200.curl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import com.taobao.arthas.core.util.IOUtils;
+import com.taobao.arthas.core.util.StringUtils;
 
 /**
  * @author zhaoyuening
@@ -24,7 +24,7 @@ public class CurlBuilder {
         private String value;
 
         public static List<Header> parseHeaders(HttpServletRequest request) {
-            List<Header> headers = new ArrayList<>();
+            List<Header> headers = new ArrayList<Header>();
 
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
@@ -86,7 +86,7 @@ public class CurlBuilder {
     }
 
     public String build() {
-        List<String> parts = new ArrayList<>();
+        List<String> parts = new ArrayList<String>();
         parts.add("curl");
         parts.addAll(options);
         parts.add(String.format(FORMAT_METHOD, method.toUpperCase()));
@@ -106,7 +106,7 @@ public class CurlBuilder {
 
         parts.add(String.format(FORMAT_URL, url));
 
-        return delimiter + StringUtils.join(parts,' ');
+        return delimiter + StringUtils.join(parts.toArray()," ");
     }
 
     private String parseBody(HttpServletRequest request) throws IOException {
@@ -120,7 +120,7 @@ public class CurlBuilder {
             return "";
         }
 
-        return IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
+        return IOUtils.toString(request.getInputStream());
     }
 
     /**
