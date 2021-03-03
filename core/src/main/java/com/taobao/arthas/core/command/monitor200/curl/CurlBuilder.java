@@ -2,14 +2,13 @@ package com.taobao.arthas.core.command.monitor200.curl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import com.taobao.arthas.core.util.IOUtils;
 import com.taobao.arthas.core.util.StringUtils;
@@ -23,7 +22,7 @@ public class CurlBuilder {
         private String name;
         private String value;
 
-        public static List<Header> parseHeaders(HttpServletRequest request) {
+        public static List<Header> parseHeaders(Request request) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
             List<Header> headers = new ArrayList<Header>();
 
             Enumeration<String> headerNames = request.getHeaderNames();
@@ -57,15 +56,16 @@ public class CurlBuilder {
     protected final List<Header> headers;
     protected final String delimiter;
 
-    public CurlBuilder(HttpServletRequest request) throws IOException {
-        this(request, -1L, Options.builder().location().build());
+    public CurlBuilder(Object requestObj) throws Exception {
+        this(requestObj, -1L, Options.builder().location().build());
     }
 
-    public CurlBuilder(HttpServletRequest request, long limit, Options options) throws IOException {
-        this(request, limit, options, " ");
+    public CurlBuilder(Object requestObj, long limit, Options options) throws Exception {
+        this(requestObj, limit, options, " ");
     }
 
-    public CurlBuilder(HttpServletRequest request, long limit, Options options, String delimiter) throws IOException {
+    public CurlBuilder(Object requestObj, long limit, Options options, String delimiter) throws Exception {
+        Request request = new Request(requestObj);
         this.url = request.getRequestURL().toString() + parseParams(request);
         this.method = request.getMethod();
         this.options = Collections.unmodifiableList(options.list());
@@ -76,7 +76,7 @@ public class CurlBuilder {
         this.headers = Header.parseHeaders(request);
     }
 
-    private String parseParams(HttpServletRequest request) throws UnsupportedEncodingException {
+    private String parseParams(Request request) throws UnsupportedEncodingException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         // 因为 application/x-www-form-urlencoded params 都传入了 body 无需了
         if (!request.getParameterNames().hasMoreElements() || CONTENT_TYPE_URLENCODED.equals(request.getContentType())) {
             return "";
@@ -109,7 +109,7 @@ public class CurlBuilder {
         return delimiter + StringUtils.join(parts.toArray()," ");
     }
 
-    private String parseBody(HttpServletRequest request) throws IOException {
+    private String parseBody(Request request) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // 如果是 application/x-www-form-urlencoded 将所有 params 传入 body 中
         if (request.getParameterNames().hasMoreElements() &&
                 CONTENT_TYPE_URLENCODED.equals(request.getContentType())) {

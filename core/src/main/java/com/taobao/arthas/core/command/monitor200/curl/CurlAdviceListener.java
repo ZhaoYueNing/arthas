@@ -17,7 +17,7 @@ public class CurlAdviceListener extends AdviceListenerAdapter {
 
     @Override
     public void before(ClassLoader loader, Class<?> clazz, ArthasMethod method, Object target, Object[] args) throws Throwable {
-        process.appendResult(new CurlModel());
+        process.appendResult(new CurlModel(clazz));
         process.end();
     }
 

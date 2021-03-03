@@ -10,11 +10,13 @@ import com.taobao.middleware.cli.annotations.Argument;
 import com.taobao.middleware.cli.annotations.Description;
 import com.taobao.middleware.cli.annotations.Name;
 import com.taobao.middleware.cli.annotations.Option;
+import com.taobao.middleware.cli.annotations.Summary;
 
 /**
  * @author zhaoyuening
  */
 @Name("curl")
+@Summary("Get the curl command.")
 public class CurlCommand extends EnhancerCommand {
 
     private String classPattern;
@@ -72,6 +74,6 @@ public class CurlCommand extends EnhancerCommand {
 
     @Override
     protected AdviceListener getAdviceListener(CommandProcess process) {
-        return null;
+        return new CurlAdviceListener(process);
     }
 }

@@ -9,6 +9,6 @@ import com.taobao.arthas.core.shell.command.CommandProcess;
 public class CurlView extends ResultView<CurlModel> {
     @Override
     public void draw(CommandProcess process, CurlModel result) {
-        process.write("curl=" + result.getCurl());
+        process.write(result.getCurl() + "\n");
     }
 }
