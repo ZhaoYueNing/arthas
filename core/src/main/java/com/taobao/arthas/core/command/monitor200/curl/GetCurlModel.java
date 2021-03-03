@@ -5,9 +5,9 @@ import com.taobao.arthas.core.command.model.ResultModel;
 /**
  * @author zhaoyuening
  */
-public class CurlModel extends ResultModel {
+public class GetCurlModel extends ResultModel {
 
-    public CurlModel(Class clazz) {
+    public GetCurlModel(Class clazz) {
         this.curl = new RequestCurl(clazz).toString();
     }
 

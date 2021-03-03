@@ -3,20 +3,17 @@ package com.taobao.arthas.core.command.monitor200.curl;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.util.Enumeration;
 import java.util.Map;
-
-import com.taobao.arthas.core.util.IOUtils;
 
 /**
  * @author zhaoyuening
  */
-public class Request {
+public class HttpRequest {
 
     private Object requestObj;
 
-    public Request(Object requestObj) {
+    public HttpRequest(Object requestObj) {
         this.requestObj = requestObj;
     }
 

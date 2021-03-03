@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 public class RequestCurl {
 
     private Class clazz;
+    private Object requestObj;
 
     public RequestCurl(Class clazz) {
         this.clazz = clazz;
@@ -32,7 +33,7 @@ public class RequestCurl {
             if (requestObj == null) {
                 return "noCurl";
             }
-            return new CurlBuilder(requestObj).build();
+            return new GetCurlBuilder(requestObj).build();
         } catch (Exception skip) {
             return "noCurl";
         }

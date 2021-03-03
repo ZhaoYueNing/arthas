@@ -7,9 +7,9 @@ import com.taobao.arthas.core.shell.command.CommandProcess;
 /**
  * @author zhaoyuening
  */
-public class CurlAdviceListener extends AdviceListenerAdapter {
+public class GetCurlAdviceListener extends AdviceListenerAdapter {
 
-    public CurlAdviceListener(CommandProcess process) {
+    public GetCurlAdviceListener(GetCurlCommand getCurlCommand, CommandProcess process) {
         this.process = process;
     }
 
@@ -17,7 +17,7 @@ public class CurlAdviceListener extends AdviceListenerAdapter {
 
     @Override
     public void before(ClassLoader loader, Class<?> clazz, ArthasMethod method, Object target, Object[] args) throws Throwable {
-        process.appendResult(new CurlModel(clazz));
+        process.appendResult(new GetCurlModel(clazz));
         process.end();
     }
 

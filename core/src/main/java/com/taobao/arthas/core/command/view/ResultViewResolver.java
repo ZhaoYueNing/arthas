@@ -3,7 +3,6 @@ package com.taobao.arthas.core.command.view;
 import com.alibaba.arthas.deps.org.slf4j.Logger;
 import com.alibaba.arthas.deps.org.slf4j.LoggerFactory;
 import com.taobao.arthas.core.command.model.ResultModel;
-import com.taobao.arthas.core.command.monitor200.curl.CurlView;
 import com.taobao.arthas.core.shell.command.CommandProcess;
 
 import java.lang.reflect.Method;
@@ -78,7 +77,7 @@ public class ResultViewResolver {
             registerView(TimeTunnelView.class);
             registerView(TraceView.class);
             registerView(WatchView.class);
-            registerView(CurlView.class);
+            registerView(GetCurlView.class);
         } catch (Throwable e) {
             logger.error("register result view failed", e);
         }

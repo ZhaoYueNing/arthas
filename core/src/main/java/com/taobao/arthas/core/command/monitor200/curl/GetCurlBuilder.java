@@ -16,13 +16,13 @@ import com.taobao.arthas.core.util.StringUtils;
 /**
  * @author zhaoyuening
  */
-public class CurlBuilder {
+public class GetCurlBuilder {
 
     public static class Header {
         private String name;
         private String value;
 
-        public static List<Header> parseHeaders(Request request) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        public static List<Header> parseHeaders(HttpRequest request) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
             List<Header> headers = new ArrayList<Header>();
 
             Enumeration<String> headerNames = request.getHeaderNames();
@@ -56,27 +56,19 @@ public class CurlBuilder {
     protected final List<Header> headers;
     protected final String delimiter;
 
-    public CurlBuilder(Object requestObj) throws Exception {
-        this(requestObj, -1L, Options.builder().location().build());
-    }
-
-    public CurlBuilder(Object requestObj, long limit, Options options) throws Exception {
-        this(requestObj, limit, options, " ");
-    }
-
-    public CurlBuilder(Object requestObj, long limit, Options options, String delimiter) throws Exception {
-        Request request = new Request(requestObj);
+    public GetCurlBuilder(Object requestObj) throws Exception {
+        HttpRequest request = new HttpRequest(requestObj);
         this.url = request.getRequestURL().toString() + parseParams(request);
         this.method = request.getMethod();
-        this.options = Collections.unmodifiableList(options.list());
-        this.delimiter = delimiter;
+        this.options = Collections.singletonList("--location");
+        this.delimiter = " ";
         this.contentType = request.getContentType();
         this.body = parseBody(request);
         // 填充http头
         this.headers = Header.parseHeaders(request);
     }
 
-    private String parseParams(Request request) throws UnsupportedEncodingException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    private String parseParams(HttpRequest request) throws UnsupportedEncodingException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         // 因为 application/x-www-form-urlencoded params 都传入了 body 无需了
         if (!request.getParameterNames().hasMoreElements() || CONTENT_TYPE_URLENCODED.equals(request.getContentType())) {
             return "";
@@ -109,7 +101,7 @@ public class CurlBuilder {
         return delimiter + StringUtils.join(parts.toArray()," ");
     }
 
-    private String parseBody(Request request) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    private String parseBody(HttpRequest request) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // 如果是 application/x-www-form-urlencoded 将所有 params 传入 body 中
         if (request.getParameterNames().hasMoreElements() &&
                 CONTENT_TYPE_URLENCODED.equals(request.getContentType())) {
@@ -146,7 +138,7 @@ public class CurlBuilder {
     }
     protected boolean containsName(List<Header> headers) {
         for (Header header : headers) {
-            if (header.name.equals(CurlBuilder.CONTENT_TYPE)) {
+            if (header.name.equals(GetCurlBuilder.CONTENT_TYPE)) {
                 return true;
             }
         }

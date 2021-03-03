@@ -15,14 +15,15 @@ import com.taobao.middleware.cli.annotations.Summary;
 /**
  * @author zhaoyuening
  */
-@Name("curl")
+@Name("getcurl")
 @Summary("Get the curl command.")
-public class CurlCommand extends EnhancerCommand {
+public class GetCurlCommand extends EnhancerCommand {
 
     private String classPattern;
     private String methodPattern;
     private String conditionExpress;
     private boolean isRegEx = false;
+    private int numberOfLimit;
 
     @Argument(index = 0, argName = "class-pattern")
     @Description("The full qualified class name you want to watch")
@@ -46,6 +47,12 @@ public class CurlCommand extends EnhancerCommand {
     @Description("Enable regular expression to match (wildcard matching by default)")
     public void setRegEx(boolean regEx) {
         isRegEx = regEx;
+    }
+
+    @Option(shortName = "n", longName = "limits")
+    @Description("Threshold of execution times")
+    public void setNumberOfLimit(int numberOfLimit) {
+        this.numberOfLimit = numberOfLimit;
     }
 
     @Override
@@ -74,6 +81,14 @@ public class CurlCommand extends EnhancerCommand {
 
     @Override
     protected AdviceListener getAdviceListener(CommandProcess process) {
-        return new CurlAdviceListener(process);
+        return new GetCurlAdviceListener(this, process);
+    }
+
+    public String getConditionExpress() {
+        return conditionExpress;
+    }
+
+    public int getNumberOfLimit() {
+        return numberOfLimit;
     }
 }
